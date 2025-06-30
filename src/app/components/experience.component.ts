@@ -20,7 +20,7 @@ import { ElementCube } from '../components/element-cube.component';
 @Component({
   template: `
     <!-- カメラ -->
-    <ngt-perspective-camera [makeDefault]="true" [position]="[0, 8, 25]" />
+    <ngt-perspective-camera [makeDefault]="true" [position]="[0, 5, 15]" />
     
     <!-- ライティング -->
     <ngt-ambient-light [intensity]="0.6" />
@@ -35,7 +35,7 @@ import { ElementCube } from '../components/element-cube.component';
     }
     
     <!-- コントロール -->
-    <ngts-orbit-controls [enableDamping]="true" [maxDistance]="50" [minDistance]="5" />
+    <ngts-orbit-controls [enableDamping]="true" />
   `,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,7 +45,7 @@ export class Experience {
   elements = periodicElements;
 
   constructor() {
-    console.log('Periodic Table Experience component initialized');
+    console.log('周期表Experience コンポーネントが初期化されました');
     extend({ 
       Mesh, 
       BoxGeometry, 
@@ -58,26 +58,10 @@ export class Experience {
   }
   
   getElementPosition(element: any): [number, number, number] {
-    let x: number, y: number, z: number;
-    
-    // ランタニド系列 (原子番号 57-71)
-    if (element.atomicNumber >= 57 && element.atomicNumber <= 71) {
-      x = (element.atomicNumber - 57) * 1.2 - 9; // ランタニド系列を下に配置
-      y = -6; // 通常の周期表より下
-      z = 0;
-    }
-    // アクチニド系列 (原子番号 89-103)
-    else if (element.atomicNumber >= 89 && element.atomicNumber <= 103) {
-      x = (element.atomicNumber - 89) * 1.2 - 9; // アクチニド系列をさらに下に配置
-      y = -7.5; // ランタニドより下
-      z = 0;
-    }
-    // 通常の周期表
-    else {
-      x = (element.group - 1) * 1.2 - 10.5; // group 1-18 を中央揃え
-      y = -(element.period - 1) * 1.2 + 3; // period 1-7 を上から下へ
-      z = 0;
-    }
+    // 周期表の位置に基づいて3D座標を計算
+    const x = (element.group - 1) * 1.2 - 10; // group 1-18 を中央揃え
+    const y = -(element.period - 1) * 1.2 + 2; // period 1-7 を上から下へ
+    const z = 0;
     
     return [x, y, z];
   }

@@ -83,6 +83,11 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "host": "0.0.0.0",
+            "port": 4200,
+            "poll": 2000
+          },
           "configurations": {
             "production": {
               "buildTarget": "ngt-template:build:production"
@@ -98,5 +103,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "59a62dcc-9c57-4a6c-b0f7-e1bf2b31f8b3"
   }
 }
