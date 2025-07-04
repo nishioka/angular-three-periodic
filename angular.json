@@ -86,8 +86,7 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all",
-              "baseHref": "/angular-three-periodic/"
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
