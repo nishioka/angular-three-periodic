@@ -11,11 +11,10 @@ import {
   MeshStandardMaterial, 
   AmbientLight, 
   DirectionalLight, 
-  PerspectiveCamera, 
   CanvasTexture 
 } from 'three';
 import { periodicElements } from '../data/periodic-elements';
-import { ElementCube } from '../components/element-cube.component';
+import { ElementCube } from './element-cube.component';
 
 @Component({
   templateUrl: './experience.component.html',
@@ -32,7 +31,6 @@ export class Experience {
       Mesh, 
       BoxGeometry, 
       MeshStandardMaterial,
-      PerspectiveCamera,
       AmbientLight,
       DirectionalLight,
       CanvasTexture
