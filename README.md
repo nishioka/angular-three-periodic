@@ -4,15 +4,11 @@
 
 🌐 **[ライブデモを見る](https://nishioka.github.io/angular-three-periodic/)**
 
-> **注意**: 上記のリンクは、実際のGitHubユーザー名とリポジトリ名に置き換えてください。
-
 ## 機能
 
 - 🧪 全118元素の3D表示
 - 🎨 元素カテゴリ別の色分け
 - 🎮 マウス/タッチでの3Dナビゲーション（OrbitControls）
-- 📱 レスポンシブデザイン
-- ⚡ リアルタイムレンダリング
 
 ## 開発環境のセットアップ
 
@@ -30,10 +26,6 @@ npm start
 
 3. ブラウザで `http://localhost:4200` にアクセス
 
-## GitHub Pagesへのデプロイ
-
-このプロジェクトはGitHub Pagesに自動デプロイするよう設定されています。
-
 ### 初回セットアップ
 
 1. **リポジトリをGitHubにプッシュ**
@@ -46,26 +38,6 @@ git push -u origin main
    - GitHubリポジトリページで「Settings」タブをクリック
    - 左サイドバーで「Pages」をクリック
    - 「Source」を「GitHub Actions」に設定
-   - 保存すると自動的にワークフローが実行されます
-
-3. **デプロイの確認**
-   - 「Actions」タブでデプロイメントの進行状況を確認
-   - 完了後、`https://YOUR_USERNAME.github.io/YOUR_REPOSITORY_NAME/` でアクセス可能
-
-### トラブルシューティング
-
-- **"Resource not accessible by integration" エラーが出る場合**: 
-  1. リポジトリの「Settings」→「Actions」→「General」に移動
-  2. 「Workflow permissions」セクションで「Read and write permissions」を選択
-  3. 「Allow GitHub Actions to create and approve pull requests」にチェック
-  4. 変更を保存してワークフローを再実行
-- **"Get Pages site failed" エラーが出る場合**: 
-  1. リポジトリの「Settings」→「Pages」でGitHub Actionsが選択されていることを確認
-  2. リポジトリがパブリックであることを確認（プライベートリポジトリの場合はGitHub Pro が必要）
-  3. 「Actions」タブでワークフローの権限が有効になっていることを確認
-- **ワークフローが失敗する場合**: Actions タブでエラーログを確認してください
-- **アクセスできない場合**: DNS の反映に数分かかる場合があります
-- **404エラーが出る場合**: `base-href` の設定がリポジトリ名と一致していることを確認してください
 
 ### 手動ビルド
 
