@@ -54,6 +54,11 @@ git push -u origin main
 
 ### トラブルシューティング
 
+- **"Resource not accessible by integration" エラーが出る場合**: 
+  1. リポジトリの「Settings」→「Actions」→「General」に移動
+  2. 「Workflow permissions」セクションで「Read and write permissions」を選択
+  3. 「Allow GitHub Actions to create and approve pull requests」にチェック
+  4. 変更を保存してワークフローを再実行
 - **"Get Pages site failed" エラーが出る場合**: 
   1. リポジトリの「Settings」→「Pages」でGitHub Actionsが選択されていることを確認
   2. リポジトリがパブリックであることを確認（プライベートリポジトリの場合はGitHub Pro が必要）
