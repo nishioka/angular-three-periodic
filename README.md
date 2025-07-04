@@ -2,7 +2,7 @@
 
 インタラクティブな3D周期表をAngular、angular-three、angular-three-sobaを使用して構築したプロジェクトです。各元素は3Dキューブとして表示され、カテゴリ別に色分けされています。
 
-🌐 **[ライブデモを見る](https://YOUR_USERNAME.github.io/YOUR_REPOSITORY_NAME/)**
+🌐 **[ライブデモを見る](https://nishioka.github.io/angular-three-periodic/)**
 
 > **注意**: 上記のリンクは、実際のGitHubユーザー名とリポジトリ名に置き換えてください。
 
