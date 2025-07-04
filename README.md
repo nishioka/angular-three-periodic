@@ -2,6 +2,10 @@
 
 インタラクティブな3D周期表をAngular、angular-three、angular-three-sobaを使用して構築したプロジェクトです。各元素は3Dキューブとして表示され、カテゴリ別に色分けされています。
 
+🌐 **[ライブデモを見る](https://YOUR_USERNAME.github.io/YOUR_REPOSITORY_NAME/)**
+
+> **注意**: 上記のリンクは、実際のGitHubユーザー名とリポジトリ名に置き換えてください。
+
 ## 機能
 
 - 🧪 全118元素の3D表示
@@ -32,9 +36,31 @@ npm start
 
 ### 初回セットアップ
 
-1. GitHubリポジトリの設定で「Pages」セクションに移動
-2. Source を「GitHub Actions」に設定
-3. `main` ブランチにプッシュすると自動的にデプロイされます
+1. **リポジトリをGitHubにプッシュ**
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git
+git push -u origin main
+```
+
+2. **GitHubリポジトリの設定**
+   - GitHubリポジトリページで「Settings」タブをクリック
+   - 左サイドバーで「Pages」をクリック
+   - 「Source」を「GitHub Actions」に設定
+   - 保存すると自動的にワークフローが実行されます
+
+3. **デプロイの確認**
+   - 「Actions」タブでデプロイメントの進行状況を確認
+   - 完了後、`https://YOUR_USERNAME.github.io/YOUR_REPOSITORY_NAME/` でアクセス可能
+
+### トラブルシューティング
+
+- **"Get Pages site failed" エラーが出る場合**: 
+  1. リポジトリの「Settings」→「Pages」でGitHub Actionsが選択されていることを確認
+  2. リポジトリがパブリックであることを確認（プライベートリポジトリの場合はGitHub Pro が必要）
+  3. 「Actions」タブでワークフローの権限が有効になっていることを確認
+- **ワークフローが失敗する場合**: Actions タブでエラーログを確認してください
+- **アクセスできない場合**: DNS の反映に数分かかる場合があります
+- **404エラーが出る場合**: `base-href` の設定がリポジトリ名と一致していることを確認してください
 
 ### 手動ビルド
 
@@ -59,12 +85,13 @@ npm run build:github-pages
 src/
 ├── app/
 │   ├── components/          # 再利用可能なコンポーネント
-│   │   └── element-cube.component.ts
-│   ├── data/               # 元素データ
-│   │   └── periodic-elements.ts
-│   ├── experience/         # メイン3Dシーン
+│   │   ├── element-cube.component.ts
+│   │   ├── element-cube.component.html
 │   │   ├── experience.component.ts
 │   │   └── experience.component.html
+│   ├── data/               # 元素データ
+│   │   └── periodic-elements.ts
 │   └── app.component.ts    # ルートコンポーネント
-└── styles.css             # グローバルスタイル
+├── styles.css             # グローバルスタイル
+└── index.html             # メインHTMLファイル
 ```
