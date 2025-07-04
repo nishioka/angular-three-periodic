@@ -18,25 +18,7 @@ import { periodicElements } from '../data/periodic-elements';
 import { ElementCube } from '../components/element-cube.component';
 
 @Component({
-  template: `
-    <!-- カメラ -->
-    <ngt-perspective-camera [makeDefault]="true" [position]="[0, 5, 15]" />
-    
-    <!-- ライティング -->
-    <ngt-ambient-light [intensity]="0.6" />
-    <ngt-directional-light [position]="[10, 10, 5]" [intensity]="1" />
-    
-    <!-- 各元素のキューブ -->
-    @for (element of elements; track element.atomicNumber) {
-      <app-element-cube
-        [element]="element"
-        [position]="getElementPosition(element)"
-      />
-    }
-    
-    <!-- コントロール -->
-    <ngts-orbit-controls [enableDamping]="true" />
-  `,
+  templateUrl: './experience.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ElementCube, NgtsOrbitControls],

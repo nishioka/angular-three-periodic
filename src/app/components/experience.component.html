@@ -1,0 +1,14 @@
+<!-- 各元素のキューブ -->
+@for (element of elements; track element.atomicNumber) {
+  <app-element-cube
+    [element]="element"
+    [position]="getElementPosition(element)"
+  />
+}
+
+<!-- ライティング -->
+<ngt-ambient-light [intensity]="0.6" />
+<ngt-directional-light [position]="[10, 10, 5]" [intensity]="1" />
+
+<!-- コントロール -->
+<ngts-orbit-controls [enableDamping]="true" />

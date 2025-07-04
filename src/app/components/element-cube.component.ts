@@ -13,24 +13,7 @@ import { Element } from '../data/periodic-elements';
 
 @Component({
   selector: 'app-element-cube',
-  template: `
-    <ngt-mesh 
-      #mesh
-      [position]="position()"
-      [scale]="hovered() ? 1.2 : 1"
-      (pointerover)="onHover(true)"
-      (pointerout)="onHover(false)"
-      (click)="onClick()"
-    >
-      <ngt-box-geometry [args]="[0.8, 0.8, 0.8]" />
-      <ngt-mesh-standard-material 
-        [color]="element().color"
-        [map]="texture"
-        [transparent]="true"
-        [opacity]="hovered() ? 0.9 : 0.8"
-      />
-    </ngt-mesh>
-  `,
+  templateUrl: './element-cube.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,

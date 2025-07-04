@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { NgtCanvas } from 'angular-three';
-import { Experience } from './experience/experience.component';
+import { Experience } from './components/experience.component';
 
 @Component({
   selector: 'app-root',
   template: `
     <ngt-canvas 
-      [sceneGraph]="sceneGraph" 
+      [sceneGraph]="sceneGraph"
+      [camera]="{ position: [0, 0, 20], fov: 50 }"
       style="width: 100%; height: 100%; display: block;" />
   `,
   host: { class: 'block h-dvh w-full' },
