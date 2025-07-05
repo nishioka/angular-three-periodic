@@ -3,8 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  signal,
+  viewChild,
+  ElementRef,
+  inject,
 } from '@angular/core';
-import { extend } from 'angular-three';
+import { extend, injectStore } from 'angular-three';
 import { NgtsOrbitControls } from 'angular-three-soba/controls';
 import { 
   BoxGeometry, 
@@ -26,6 +30,13 @@ import { PeerService, PeerMessage } from '../services/peer.service';
 })
 export class Experience {
   elements = periodicElements;
+  
+  // Camera control
+  private orbitControlsRef = viewChild<ElementRef>('orbitControls');
+  private store = injectStore();
+  cameraAngleX = signal<number>(0);
+  cameraAngleY = signal<number>(0);  
+  cameraDistance = signal<number>(20);
 
   constructor(private peerService: PeerService) {
     console.log('Periodic Table Experience component initialized with P2P support');
@@ -94,8 +105,8 @@ export class Experience {
         break;
       
       case 'camera-sync':
-        console.log('Peer camera position:', message.data);
-        // Implement camera synchronization if needed
+        console.log('Peer camera sync:', message.data);
+        this.applyCameraSync(message.data);
         break;
       
       case 'position':
@@ -121,5 +132,41 @@ export class Experience {
     // Add temporary visual feedback for peer interactions
     console.log(`Highlighting element ${element.symbol} due to peer interaction`);
     // You can implement visual highlighting here
+  }
+
+  private applyCameraSync(cameraData: { angleX: number, angleY: number, distance: number }) {
+    console.log('Applying camera sync:', cameraData);
+    
+    // Update local camera state
+    this.cameraAngleX.set(cameraData.angleX);
+    this.cameraAngleY.set(cameraData.angleY);
+    this.cameraDistance.set(cameraData.distance);
+    
+    // Get camera from angular-three store
+    const camera = this.store.snapshot.camera;
+    
+    if (camera) {
+      console.log('Camera found via store');
+      
+      // Convert angles to radians for Three.js
+      const azimuthAngle = (cameraData.angleX * Math.PI) / 180;
+      const polarAngle = Math.max(0.1, Math.min(Math.PI - 0.1, ((90 - cameraData.angleY) * Math.PI) / 180));
+      
+      // Set camera position based on spherical coordinates
+      const x = cameraData.distance * Math.sin(polarAngle) * Math.cos(azimuthAngle);
+      const y = cameraData.distance * Math.cos(polarAngle);
+      const z = cameraData.distance * Math.sin(polarAngle) * Math.sin(azimuthAngle);
+      
+      console.log('Setting camera position to:', { x, y, z });
+      
+      // Update camera position
+      camera.position.set(x, y, z);
+      camera.lookAt(0, 0, 0);
+      camera.updateProjectionMatrix();
+      
+      console.log('Camera position updated via store');
+    } else {
+      console.warn('Camera not found in store');
+    }
   }
 }

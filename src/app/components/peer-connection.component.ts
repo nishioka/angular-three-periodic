@@ -18,6 +18,11 @@ export class PeerConnectionComponent implements OnInit {
   connecting = signal<boolean>(false);
   showQR = signal<boolean>(false);
   qrDataUrl = signal<string>('');
+  
+  // Camera angle controls
+  cameraAngleX = signal<number>(0);
+  cameraAngleY = signal<number>(0);
+  cameraDistance = signal<number>(20);
 
   constructor(
     public peerService: PeerService,
@@ -29,6 +34,14 @@ export class PeerConnectionComponent implements OnInit {
       const peerId = this.peerService.peerId();
       if (peerId) {
         this.generateQRCode(peerId);
+      }
+    });
+
+    // Listen for camera sync messages from peers
+    effect(() => {
+      const message = this.peerService.lastMessage();
+      if (message && message.type === 'camera-sync') {
+        this.updateCameraFromPeer(message.data);
       }
     });
   }
@@ -139,15 +152,43 @@ export class PeerConnectionComponent implements OnInit {
     return JSON.stringify(message, null, 2);
   }
 
-  formatTime(timestamp: number): string {
-    return new Date(timestamp).toLocaleTimeString();
+  // Camera angle control methods
+  onCameraAngleXChange(value: number) {
+    this.cameraAngleX.set(value);
+    this.sendCameraSync();
   }
 
-  formatMessageData(data: any): string {
-    if (typeof data === 'object') {
-      return JSON.stringify(data, null, 1);
-    }
-    return String(data);
+  onCameraAngleYChange(value: number) {
+    this.cameraAngleY.set(value);
+    this.sendCameraSync();
+  }
+
+  onCameraDistanceChange(value: number) {
+    this.cameraDistance.set(value);
+    this.sendCameraSync();
+  }
+
+  private sendCameraSync() {
+    const cameraMessage = {
+      type: 'camera-sync' as const,
+      data: {
+        angleX: this.cameraAngleX(),
+        angleY: this.cameraAngleY(),
+        distance: this.cameraDistance()
+      },
+      timestamp: Date.now()
+    };
+    
+    this.peerService.sendMessage(cameraMessage);
+  }
+
+  private updateCameraFromPeer(cameraData: { angleX: number, angleY: number, distance: number }) {
+    console.log('Updating camera controls from peer:', cameraData);
+    
+    // Update local camera controls without triggering sync
+    this.cameraAngleX.set(cameraData.angleX);
+    this.cameraAngleY.set(cameraData.angleY);
+    this.cameraDistance.set(cameraData.distance);
   }
 
   getMyRole(): 'HOST' | 'CLIENT' | null {
