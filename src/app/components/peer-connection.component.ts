@@ -116,7 +116,41 @@ export class PeerConnectionComponent implements OnInit {
     }
   }
 
+  sendTestMessage() {
+    const testMessage = {
+      type: 'element-click' as const,
+      data: {
+        element: {
+          name: 'Test Element',
+          symbol: 'Te',
+          atomicNumber: 99,
+          category: 'test'
+        },
+        position: [0, 0, 0]
+      },
+      timestamp: Date.now()
+    };
+    
+    this.peerService.sendMessage(testMessage);
+    console.log('Test message sent:', testMessage);
+  }
+
   formatMessage(message: any): string {
     return JSON.stringify(message, null, 2);
+  }
+
+  formatTime(timestamp: number): string {
+    return new Date(timestamp).toLocaleTimeString();
+  }
+
+  formatMessageData(data: any): string {
+    if (typeof data === 'object') {
+      return JSON.stringify(data, null, 1);
+    }
+    return String(data);
+  }
+
+  getMyRole(): 'HOST' | 'CLIENT' | null {
+    return this.peerService.getMyRole();
   }
 }

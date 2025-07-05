@@ -57,27 +57,38 @@ export class Experience {
   }
 
   onElementClick(element: any) {
+    console.log('=== ELEMENT CLICK ===');
     console.log(`Element clicked: ${element.name} (${element.symbol})`);
+    console.log('My role:', this.peerService.getMyRole());
+    console.log('Connected peers:', this.peerService.connectedPeers());
     
     // Broadcast element click to connected peers
     const message: PeerMessage = {
       type: 'element-click',
       data: {
         element: element,
-        position: this.getElementPosition(element)
+        position: this.getElementPosition(element),
+        clickedBy: this.peerService.peerId()
       },
       timestamp: Date.now()
     };
     
+    console.log('Sending element click message:', message);
     this.peerService.sendMessage(message);
+    console.log('=== END ELEMENT CLICK ===');
   }
 
   private handlePeerMessage(message: PeerMessage) {
-    console.log('Handling peer message:', message);
+    console.log('=== HANDLING PEER MESSAGE ===');
+    console.log('Message type:', message.type);
+    console.log('Message data:', message.data);
+    console.log('Message sender:', message.sender);
+    console.log('My role:', this.peerService.getMyRole());
     
     switch (message.type) {
       case 'element-click':
         console.log(`Peer clicked element: ${message.data.element.name}`);
+        console.log('Element click data:', message.data);
         // You can add visual feedback here, like highlighting the element
         this.highlightElement(message.data.element);
         break;
@@ -92,9 +103,18 @@ export class Experience {
         // Handle position updates
         break;
       
+      case 'connection-established':
+        console.log('Connection established with peer:', message.data.message);
+        break;
+      
+      case 'heartbeat':
+        console.log('Heartbeat from peer:', message.data);
+        break;
+      
       default:
         console.log('Unknown message type:', message.type);
     }
+    console.log('=== END HANDLING PEER MESSAGE ===');
   }
 
   private highlightElement(element: any) {

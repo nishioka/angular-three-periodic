@@ -171,3 +171,133 @@
   font-size: 10px;
   color: #ccc;
 }
+
+.test-btn {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  margin-top: 5px;
+  width: 100%;
+}
+
+.test-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+}
+
+.test-section {
+  margin-top: 8px;
+}
+
+.message-history {
+  margin-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 10px;
+}
+
+.message-history h4 {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+}
+
+.messages-container {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.message-item {
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 5px;
+  padding: 5px;
+  border-radius: 3px;
+  border-left: 3px solid #6d28d9;
+}
+
+.message-item[data-type="element-click"] {
+  border-left-color: #f59e0b;
+}
+
+.message-item[data-type="element-click"] .message-type {
+  background: #f59e0b;
+}
+
+.message-item[data-type="connection-established"] {
+  border-left-color: #10b981;
+}
+
+.message-item[data-type="connection-established"] .message-type {
+  background: #10b981;
+}
+
+.message-item[data-type="heartbeat"] {
+  border-left-color: #6b7280;
+}
+
+.message-item[data-type="heartbeat"] .message-type {
+  background: #6b7280;
+}
+
+.message-type {
+  background: #6d28d9;
+  color: white;
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-size: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.message-time {
+  font-size: 8px;
+  color: #a0a0a0;
+  margin-left: 5px;
+}
+
+.message-data {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3px;
+  border-radius: 2px;
+  font-size: 8px;
+  margin: 3px 0 0 0;
+  max-height: 40px;
+  overflow-y: auto;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 3px;
+}
+
+.message-sender {
+  font-size: 8px;
+  color: #d1d5db;
+  font-weight: bold;
+}
+
+.message-item.sent {
+  background: rgba(139, 69, 19, 0.1);
+  border-left-color: #dc2626;
+}
+
+.message-item.sent .message-sender {
+  color: #dc2626;
+}
+
+/* My Role Badge Styles */
+.my-role-badge {
+  font-size: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.my-role-badge.role-host {
+  background: #059669;
+  color: white;
+}
+
+.my-role-badge.role-client {
+  background: #2563eb;
+  color: white;
+}

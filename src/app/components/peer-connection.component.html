@@ -11,6 +11,11 @@
       <span [class]="peerService.isConnected() ? 'connected' : 'disconnected'">
         {{ peerService.isConnected() ? 'Connected' : 'Disconnected' }}
       </span>
+      @if (getMyRole()) {
+        <span class="my-role-badge" [class]="'role-' + getMyRole()!.toLowerCase()">
+          {{ getMyRole() }}
+        </span>
+      }
     </div>
     
     <!-- QR Code and Share Section -->
@@ -46,23 +51,53 @@
         {{ connecting() ? 'Connecting...' : 'Connect' }}
       </button>
     </div>
+    
+    @if (peerService.connectedPeers().length > 0) {
+      <div class="test-section">
+        <button (click)="sendTestMessage()" class="test-btn">
+          Send Test Message
+        </button>
+      </div>
+    }
   </div>
 
-  @if (peerService.connectedPeers().length > 0) {
+  @if (peerService.peerRoles().length > 0) {
     <div class="connected-peers">
       <h4>Connected Peers:</h4>
       <ul>
-        @for (peerId of peerService.connectedPeers(); track peerId) {
-          <li>{{ peerId }}</li>
+        @for (peerRole of peerService.peerRoles(); track peerRole.peerId) {
+          <li class="peer-role-item">
+            <span class="peer-id">{{ peerRole.peerId.slice(-8) }}</span>
+            <span class="role-badge" [class]="peerRole.role.toLowerCase()">
+              {{ peerRole.role }}
+            </span>
+          </li>
         }
       </ul>
+      <div class="my-role">
+        <span class="my-role-label">Your Role:</span>
+        <span class="role-badge self">
+          {{ getMyRole() }}
+        </span>
+      </div>
     </div>
   }
 
-  @if (peerService.lastMessage()) {
-    <div class="last-message">
-      <h4>Last Message:</h4>
-      <pre>{{ formatMessage(peerService.lastMessage()!) }}</pre>
+  @if (peerService.messageHistory().length > 0) {
+    <div class="message-history">
+      <h4>Message History:</h4>
+      <div class="messages-container">
+        @for (message of peerService.messageHistory(); track message.timestamp) {
+          <div class="message-item" [attr.data-type]="message.type" [class.sent]="message.sender === 'self'">
+            <div class="message-header">
+              <span class="message-type">{{ message.type }}</span>
+              <span class="message-sender">{{ message.sender === 'self' ? 'You' : message.sender?.slice(-8) || 'Unknown' }}</span>
+              <span class="message-time">{{ formatTime(message.timestamp) }}</span>
+            </div>
+            <pre class="message-data">{{ formatMessageData(message.data) }}</pre>
+          </div>
+        }
+      </div>
     </div>
   }
 </div>
