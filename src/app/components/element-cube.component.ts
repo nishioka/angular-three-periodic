@@ -6,6 +6,7 @@ import {
   input,
   signal,
   viewChild,
+  output,
 } from '@angular/core';
 import { extend, injectObjectEvents } from 'angular-three';
 import { Mesh, BoxGeometry, MeshStandardMaterial, CanvasTexture } from 'three';
@@ -21,6 +22,7 @@ import { Element } from '../data/periodic-elements';
 export class ElementCube {
   element = input.required<Element>();
   position = input.required<[number, number, number]>();
+  elementClick = output<Element>();
   
   private meshRef = viewChild.required<ElementRef<Mesh>>('mesh');
   protected hovered = signal(false);
@@ -78,6 +80,12 @@ export class ElementCube {
   }
 
   onClick() {
-    console.log('Clicked element:', this.element());
+    console.log(`Clicked element: ${this.element().name} (${this.element().symbol})`);
+    console.log(`Atomic Number: ${this.element().atomicNumber}`);
+    console.log(`Atomic Mass: ${this.element().atomicMass}`);
+    console.log(`Category: ${this.element().category}`);
+    
+    // Emit click event for P2P broadcasting
+    this.elementClick.emit(this.element());
   }
 }

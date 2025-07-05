@@ -17,10 +17,35 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  
+  /* 科学的でモダンなグラデーション背景 */
+  background: linear-gradient(135deg, 
+    #0f0f23 0%,      /* 深い紺色 */
+    #1a1a3a 25%,     /* ダークブルー */
+    #2d1b69 50%,     /* パープル */
+    #44318d 75%,     /* ライトパープル */
+    #1e3a8a 100%     /* インディゴ */
+  );
+  
+  /* アニメーション付きの微細なパターン */
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 app-root {
@@ -33,9 +58,11 @@ ngt-canvas {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
+  background: transparent !important;
 }
 
 canvas {
   display: block !important;
   outline: none;
+  background: transparent !important;
 }

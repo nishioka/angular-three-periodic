@@ -1,0 +1,51 @@
+<div class="peer-panel">
+  <div class="peer-info">
+    <h3>P2P Connection</h3>
+    <div class="peer-id">
+      <label>Your ID:</label>
+      <span class="id-display">{{ peerService.peerId() }}</span>
+      <button (click)="copyPeerId()" class="copy-btn">Copy</button>
+    </div>
+    <div class="connection-status">
+      Status: 
+      <span [class]="peerService.isConnected() ? 'connected' : 'disconnected'">
+        {{ peerService.isConnected() ? 'Connected' : 'Disconnected' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="connect-section">
+    <div class="input-group">
+      <input 
+        [(ngModel)]="targetPeerId" 
+        placeholder="Enter peer ID to connect"
+        class="peer-input"
+      />
+      <button 
+        (click)="connectToPeer()" 
+        [disabled]="!targetPeerId() || connecting()"
+        class="connect-btn"
+      >
+        {{ connecting() ? 'Connecting...' : 'Connect' }}
+      </button>
+    </div>
+  </div>
+
+  @if (peerService.connectedPeers().length > 0) {
+    <div class="connected-peers">
+      <h4>Connected Peers:</h4>
+      <ul>
+        @for (peerId of peerService.connectedPeers(); track peerId) {
+          <li>{{ peerId }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (peerService.lastMessage()) {
+    <div class="last-message">
+      <h4>Last Message:</h4>
+      <pre>{{ formatMessage(peerService.lastMessage()!) }}</pre>
+    </div>
+  }
+</div>
