@@ -11,22 +11,45 @@
 - 🎮 マウス/タッチでの3Dナビゲーション（OrbitControls）
 - 🔗 **PeerJSを使用したリアルタイム P2P 通信**
 - 👥 **複数ブラウザ間での元素クリックの同期**
+- 📱 **スマートフォンのジャイロセンサー対応**
+- 🎛️ **リアルタイムカメラ角度同期**
+- 📱 **QRコードによる簡単接続**
 
 ## P2P機能
 
 このアプリケーションはPeerJSを使用して複数のブラウザ間でリアルタイム通信を提供します：
 
 - **接続共有**: 右上のパネルに表示されるPeer IDを他のユーザーと共有
+- **QRコード接続**: QRコードを生成・スキャンして簡単に接続
 - **リアルタイム同期**: 元素をクリックすると、接続されたピアに通知が送信
-- **接続状態の表示**: 現在接続されているピアの一覧を表示
+- **カメラ同期**: スライダーやジャイロセンサーを使用してカメラ角度をリアルタイム同期
+- **ジャイロセンサー対応**: スマートフォンのジャイロセンサーでカメラを制御
+
+### カメラ同期機能
+
+- **手動制御**: スライダーでカメラの角度（X軸、Y軸）と距離を調整
+- **ジャイロセンサー**: スマートフォンで端末の傾きに応じてリアルタイムでカメラが移動
+- **リアルタイム同期**: 一方の操作が他方のブラウザに即座に反映
+
+### ジャイロセンサー使用方法
+
+1. スマートフォンでQRコードをスキャンしてアプリにアクセス
+2. P2P接続が確立したらカメラコントロールセクションで「Enable Gyroscope」をタップ
+3. 権限を許可（iOS 13+では明示的な許可が必要）
+4. スマートフォンを傾けると、接続された全てのデバイスでカメラ角度が同期
+
+**対応デバイス**:
+- iOS Safari（iOS 13+、権限許可必須）
+- Android Chrome
+- その他のモバイルブラウザ（DeviceOrientationEvent対応）
 
 ### P2P使用方法
 
 1. アプリケーションを開くと、右上に自動生成されたPeer IDが表示されます
-2. "Copy"ボタンでPeer IDをクリップボードにコピー
-3. 他のユーザーとPeer IDを共有
+2. **QRコード**: "Show QR"ボタンでQRコードを表示、他のデバイスでスキャン
+3. **手動接続**: "Copy"ボタンでPeer IDをコピーし、相手と共有
 4. 相手のPeer IDを入力フィールドに入力して"Connect"をクリック
-5. 接続後、元素をクリックすると相手のブラウザにも通知されます
+5. 接続後、元素クリックやカメラ操作が全てのデバイスで同期されます
 
 ## 開発環境のセットアップ
 
@@ -65,6 +88,8 @@ npm start
 - THREE.js 0.171
 - angular-three-soba (コントロール)
 - **PeerJS (P2P通信)**
+- **QRCode (QRコード生成)**
+- **DeviceOrientationEvent API (ジャイロセンサー)**
 - `.glsl` ローダー対応
 - Tailwind CSS
 - TypeScript
@@ -79,9 +104,11 @@ src/
 │   │   ├── element-cube.component.html
 │   │   ├── experience.component.ts
 │   │   ├── experience.component.html
-│   │   └── peer-connection.component.ts  # P2P接続UI
+│   │   ├── peer-connection.component.ts   # P2P接続・カメラ制御UI
+│   │   ├── peer-connection.component.html
+│   │   └── peer-connection.component.css
 │   ├── services/           # サービス
-│   │   └── peer.service.ts # P2P通信サービス
+│   │   └── peer.service.ts # P2P通信・カメラ同期サービス
 │   ├── data/               # 元素データ
 │   │   └── periodic-elements.ts
 │   └── app.component.ts    # ルートコンポーネント
