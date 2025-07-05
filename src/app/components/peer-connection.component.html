@@ -12,6 +12,23 @@
         {{ peerService.isConnected() ? 'Connected' : 'Disconnected' }}
       </span>
     </div>
+    
+    <!-- QR Code and Share Section -->
+    <div class="qr-section">
+      <div class="qr-buttons">
+        <button (click)="toggleQR()" class="qr-btn">
+          {{ showQR() ? 'Hide QR' : 'Show QR' }}
+        </button>
+        <button (click)="shareUrl()" class="share-btn">Share URL</button>
+      </div>
+      
+      @if (showQR() && qrDataUrl()) {
+        <div class="qr-container">
+          <img [src]="qrDataUrl()" alt="QR Code for connection" class="qr-image" />
+          <p class="qr-info">Scan to connect</p>
+        </div>
+      }
+    </div>
   </div>
 
   <div class="connect-section">
