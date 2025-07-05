@@ -32,7 +32,7 @@
   font-size: 10px;
 }
 
-.copy-btn, .connect-btn {
+.copy-btn, .connect-btn, .test-btn, .qr-btn, .share-btn, .gyro-btn {
   background: linear-gradient(135deg, #44318d, #6d28d9);
   color: white;
   border: none;
@@ -42,13 +42,11 @@
   font-size: 10px;
   font-weight: 500;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(68, 49, 141, 0.3);
 }
 
-.copy-btn:hover, .connect-btn:hover {
+.copy-btn:hover, .connect-btn:hover, .test-btn:hover, .qr-btn:hover, .share-btn:hover, .gyro-btn:hover {
   background: linear-gradient(135deg, #5b21b6, #7c3aed);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(68, 49, 141, 0.4);
 }
 
 .connect-btn:disabled {
@@ -84,7 +82,6 @@
   font-size: 10px;
   background: rgba(255, 255, 255, 0.1);
   color: white;
-  backdrop-filter: blur(5px);
   transition: all 0.3s ease;
 }
 
@@ -98,6 +95,17 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+.connected-peers {
+  margin-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 10px;
+}
+
+.connected-peers h4 {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+}
+
 .connected-peers ul {
   margin: 5px 0;
   padding-left: 15px;
@@ -108,22 +116,6 @@
   font-size: 10px;
 }
 
-.last-message {
-  margin-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 10px;
-}
-
-.last-message pre {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 5px;
-  border-radius: 3px;
-  font-size: 9px;
-  max-height: 100px;
-  overflow-y: auto;
-}
-
-/* QR Code Styles */
 .qr-section {
   margin: 10px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -138,17 +130,7 @@
 
 .qr-btn, .share-btn {
   background: #2196F3;
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 10px;
   flex: 1;
-}
-
-.qr-btn:hover, .share-btn:hover {
-  background: #1976D2;
 }
 
 .qr-container {
@@ -178,111 +160,31 @@
   width: 100%;
 }
 
-.test-btn:hover {
-  background: linear-gradient(135deg, #1d4ed8, #2563eb);
-}
-
-.test-section {
-  margin-top: 8px;
-}
-
-.message-history {
-  margin-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 10px;
-}
-
-.message-history h4 {
-  margin: 0 0 8px 0;
-  font-size: 12px;
-}
-
-.messages-container {
-  max-height: 150px;
-  overflow-y: auto;
-}
-
-.message-item {
-  background: rgba(255, 255, 255, 0.05);
+.peer-role-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 5px;
-  padding: 5px;
-  border-radius: 3px;
-  border-left: 3px solid #6d28d9;
 }
 
-.message-item[data-type="element-click"] {
-  border-left-color: #f59e0b;
-}
-
-.message-item[data-type="element-click"] .message-type {
-  background: #f59e0b;
-}
-
-.message-item[data-type="connection-established"] {
-  border-left-color: #10b981;
-}
-
-.message-item[data-type="connection-established"] .message-type {
-  background: #10b981;
-}
-
-.message-item[data-type="heartbeat"] {
-  border-left-color: #6b7280;
-}
-
-.message-item[data-type="heartbeat"] .message-type {
-  background: #6b7280;
-}
-
-.message-type {
-  background: #6d28d9;
-  color: white;
-  padding: 1px 4px;
-  border-radius: 2px;
+.role-badge {
   font-size: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.message-time {
-  font-size: 8px;
-  color: #a0a0a0;
-  margin-left: 5px;
+.role-badge.host {
+  background: #059669;
+  color: white;
 }
 
-.message-data {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 3px;
-  border-radius: 2px;
-  font-size: 8px;
-  margin: 3px 0 0 0;
-  max-height: 40px;
-  overflow-y: auto;
+.role-badge.client {
+  background: #2563eb;
+  color: white;
 }
 
-.message-header {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 3px;
-}
-
-.message-sender {
-  font-size: 8px;
-  color: #d1d5db;
-  font-weight: bold;
-}
-
-.message-item.sent {
-  background: rgba(139, 69, 19, 0.1);
-  border-left-color: #dc2626;
-}
-
-.message-item.sent .message-sender {
-  color: #dc2626;
-}
-
-/* My Role Badge Styles */
 .my-role-badge {
   font-size: 8px;
   padding: 2px 6px;
@@ -302,7 +204,6 @@
   color: white;
 }
 
-/* Camera Controls Styles */
 .camera-controls {
   margin-top: 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -345,7 +246,6 @@
   border-radius: 50%;
   background: linear-gradient(135deg, #a855f7, #7c3aed);
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(168, 85, 247, 0.4);
 }
 
 .slider::-moz-range-thumb {
@@ -355,20 +255,8 @@
   background: linear-gradient(135deg, #a855f7, #7c3aed);
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 4px rgba(168, 85, 247, 0.4);
 }
 
-.slider:hover::-webkit-slider-thumb {
-  background: linear-gradient(135deg, #7c3aed, #6d28d9);
-  transform: scale(1.1);
-}
-
-.slider:hover::-moz-range-thumb {
-  background: linear-gradient(135deg, #7c3aed, #6d28d9);
-  transform: scale(1.1);
-}
-
-/* Gyroscope Controls Styles */
 .gyro-section {
   margin-bottom: 15px;
   padding: 8px;
@@ -405,27 +293,10 @@
 .gyro-btn {
   width: 100%;
   background: linear-gradient(135deg, #059669, #047857);
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 10px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.gyro-btn:hover {
-  background: linear-gradient(135deg, #047857, #065f46);
-  transform: translateY(-1px);
 }
 
 .gyro-btn.active {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
-}
-
-.gyro-btn.active:hover {
-  background: linear-gradient(135deg, #b91c1c, #991b1b);
 }
 
 .gyro-denied {
