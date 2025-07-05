@@ -66,43 +66,72 @@
     <div class="camera-controls">
       <h4>Camera Controls:</h4>
       
-      <div class="slider-group">
-        <label>Angle X: {{ cameraAngleX() }}°</label>
-        <input 
-          type="range" 
-          min="-180" 
-          max="180" 
-          step="1"
-          [(ngModel)]="cameraAngleX"
-          (ngModelChange)="onCameraAngleXChange($event)"
-          class="slider"
-        />
-      </div>
+      <!-- Gyroscope Controls -->
+      @if (gyroSupported()) {
+        <div class="gyro-section">
+          <div class="gyro-status">
+            <span class="gyro-label">Gyroscope:</span>
+            <span class="gyro-state" [class.active]="gyroEnabled()">
+              {{ gyroEnabled() ? 'ON' : 'OFF' }}
+            </span>
+          </div>
+          
+          @if (gyroPermission() === 'default') {
+            <button (click)="requestGyroscopePermission()" class="gyro-btn">
+              Enable Gyroscope
+            </button>
+          } @else if (gyroPermission() === 'granted') {
+            <button (click)="toggleGyroscope()" class="gyro-btn" [class.active]="gyroEnabled()">
+              {{ gyroEnabled() ? 'Disable' : 'Enable' }} Gyroscope
+            </button>
+          } @else {
+            <span class="gyro-denied">Permission denied</span>
+          }
+        </div>
+      }
       
-      <div class="slider-group">
-        <label>Angle Y: {{ cameraAngleY() }}°</label>
-        <input 
-          type="range" 
-          min="-90" 
-          max="90" 
-          step="1"
-          [(ngModel)]="cameraAngleY"
-          (ngModelChange)="onCameraAngleYChange($event)"
-          class="slider"
-        />
-      </div>
-      
-      <div class="slider-group">
-        <label>Distance: {{ cameraDistance() }}</label>
-        <input 
-          type="range" 
-          min="5" 
-          max="50" 
-          step="1"
-          [(ngModel)]="cameraDistance"
-          (ngModelChange)="onCameraDistanceChange($event)"
-          class="slider"
-        />
+      <!-- Manual Sliders -->
+      <div class="slider-section" [class.disabled]="gyroEnabled()">
+        <div class="slider-group">
+          <label>Angle X: {{ cameraAngleX() }}°</label>
+          <input 
+            type="range" 
+            min="-180" 
+            max="180" 
+            step="1"
+            [(ngModel)]="cameraAngleX"
+            (ngModelChange)="onCameraAngleXChange($event)"
+            [disabled]="gyroEnabled()"
+            class="slider"
+          />
+        </div>
+        
+        <div class="slider-group">
+          <label>Angle Y: {{ cameraAngleY() }}°</label>
+          <input 
+            type="range" 
+            min="-90" 
+            max="90" 
+            step="1"
+            [(ngModel)]="cameraAngleY"
+            (ngModelChange)="onCameraAngleYChange($event)"
+            [disabled]="gyroEnabled()"
+            class="slider"
+          />
+        </div>
+        
+        <div class="slider-group">
+          <label>Distance: {{ cameraDistance() }}</label>
+          <input 
+            type="range" 
+            min="5" 
+            max="50" 
+            step="1"
+            [(ngModel)]="cameraDistance"
+            (ngModelChange)="onCameraDistanceChange($event)"
+            class="slider"
+          />
+        </div>
       </div>
     </div>
   }

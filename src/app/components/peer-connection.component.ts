@@ -1,4 +1,4 @@
-import { Component, signal, effect, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, signal, effect, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PeerService } from '../services/peer.service';
@@ -11,7 +11,7 @@ import * as QRCode from 'qrcode';
   standalone: true,
   imports: [FormsModule]
 })
-export class PeerConnectionComponent implements OnInit {
+export class PeerConnectionComponent implements OnInit, OnDestroy {
   @ViewChild('qrCanvas', { static: false }) qrCanvas!: ElementRef<HTMLCanvasElement>;
   
   targetPeerId = signal<string>('');
@@ -23,6 +23,11 @@ export class PeerConnectionComponent implements OnInit {
   cameraAngleX = signal<number>(0);
   cameraAngleY = signal<number>(0);
   cameraDistance = signal<number>(20);
+  
+  // Gyroscope controls
+  gyroEnabled = signal<boolean>(false);
+  gyroSupported = signal<boolean>(false);
+  gyroPermission = signal<string>('default'); // 'granted', 'denied', 'default'
 
   constructor(
     public peerService: PeerService,
@@ -58,6 +63,16 @@ export class PeerConnectionComponent implements OnInit {
         }, 1000); // Wait for peer service to initialize
       }
     });
+    
+    // Check gyroscope support
+    this.checkGyroscopeSupport();
+  }
+
+  ngOnDestroy() {
+    // Clean up gyroscope event listener
+    if (this.gyroEnabled()) {
+      this.disableGyroscope();
+    }
   }
 
   async connectToPeer() {
@@ -185,13 +200,115 @@ export class PeerConnectionComponent implements OnInit {
   private updateCameraFromPeer(cameraData: { angleX: number, angleY: number, distance: number }) {
     console.log('Updating camera controls from peer:', cameraData);
     
-    // Update local camera controls without triggering sync
-    this.cameraAngleX.set(cameraData.angleX);
-    this.cameraAngleY.set(cameraData.angleY);
+    // Only update if gyroscope is not controlling the camera
+    if (!this.gyroEnabled()) {
+      this.cameraAngleX.set(cameraData.angleX);
+      this.cameraAngleY.set(cameraData.angleY);
+    }
+    
+    // Always update distance
     this.cameraDistance.set(cameraData.distance);
   }
 
   getMyRole(): 'HOST' | 'CLIENT' | null {
     return this.peerService.getMyRole();
+  }
+
+  // Gyroscope methods
+  checkGyroscopeSupport() {
+    if ('DeviceOrientationEvent' in window) {
+      this.gyroSupported.set(true);
+      console.log('Gyroscope is supported');
+      
+      // Check for permission API (iOS 13+)
+      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+        console.log('Permission API available');
+      } else {
+        // Android or older iOS - permission likely granted
+        this.gyroPermission.set('granted');
+      }
+    } else {
+      this.gyroSupported.set(false);
+      console.log('Gyroscope is not supported');
+    }
+  }
+
+  async requestGyroscopePermission() {
+    if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+      try {
+        const permission = await (DeviceOrientationEvent as any).requestPermission();
+        this.gyroPermission.set(permission);
+        
+        if (permission === 'granted') {
+          this.enableGyroscope();
+        }
+        
+        return permission === 'granted';
+      } catch (error) {
+        console.error('Error requesting gyroscope permission:', error);
+        this.gyroPermission.set('denied');
+        return false;
+      }
+    } else {
+      // No permission needed or already granted
+      this.gyroPermission.set('granted');
+      this.enableGyroscope();
+      return true;
+    }
+  }
+
+  enableGyroscope() {
+    if (!this.gyroSupported()) {
+      console.log('Gyroscope not supported');
+      return;
+    }
+
+    this.gyroEnabled.set(true);
+    
+    window.addEventListener('deviceorientation', this.handleDeviceOrientation.bind(this), true);
+    console.log('Gyroscope enabled');
+  }
+
+  disableGyroscope() {
+    this.gyroEnabled.set(false);
+    window.removeEventListener('deviceorientation', this.handleDeviceOrientation.bind(this), true);
+    console.log('Gyroscope disabled');
+  }
+
+  private handleDeviceOrientation(event: DeviceOrientationEvent) {
+    if (!this.gyroEnabled()) return;
+
+    // Get orientation values
+    const alpha = event.alpha || 0; // Z axis (0-360)
+    const beta = event.beta || 0;   // X axis (-180 to 180)
+    const gamma = event.gamma || 0; // Y axis (-90 to 90)
+
+    console.log(`Gyro: alpha=${alpha.toFixed(1)}, beta=${beta.toFixed(1)}, gamma=${gamma.toFixed(1)}`);
+
+    // Map gyroscope values to camera angles
+    // Alpha (compass heading) -> horizontal rotation
+    const angleX = alpha - 180; // Center around 0
+    
+    // Beta (front/back tilt) -> vertical rotation
+    const angleY = Math.max(-45, Math.min(45, beta)); // Limit range
+    
+    // Update camera angles (but keep current distance)
+    this.cameraAngleX.set(angleX);
+    this.cameraAngleY.set(angleY);
+    
+    // Send camera sync
+    this.sendCameraSync();
+  }
+
+  toggleGyroscope() {
+    if (!this.gyroEnabled()) {
+      if (this.gyroPermission() === 'granted') {
+        this.enableGyroscope();
+      } else {
+        this.requestGyroscopePermission();
+      }
+    } else {
+      this.disableGyroscope();
+    }
   }
 }
